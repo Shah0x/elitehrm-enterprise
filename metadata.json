@@ -1,0 +1,6 @@
+{
+  "name": "EliteHRM - Enterprise HRMS",
+  "description": "An enterprise-grade Human Resource Management System. Owner: Shahmeer. Crafted by Shahmeer Akram.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
