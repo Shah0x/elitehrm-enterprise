@@ -4,7 +4,6 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createServer as createViteServer } from 'vite';
 import { connectDB } from './src/server/config/db';
 import analyticsRoutes from './src/server/routes/analyticsRoutes';
 import attendanceRoutes from './src/server/routes/attendanceRoutes';
@@ -54,6 +53,8 @@ if (!process.env.VERCEL) {
     await seedDB();
 
     if (process.env.NODE_ENV !== 'production') {
+      // Dynamic import prevents Vite from being bundled into Vercel serverless function
+      const { createServer: createViteServer } = await import('vite');
       const vite = await createViteServer({
         server: { middlewareMode: true },
         appType: 'spa',
@@ -75,5 +76,4 @@ if (!process.env.VERCEL) {
   startLocal();
 }
 
-// 4. Export app for Vercel
 export default app;
