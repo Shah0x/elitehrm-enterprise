@@ -1,9 +1,8 @@
 import express from 'express';
-import Leave from '../models/Leave.ts';
-import User from '../models/User.ts';
-import ActivityLog from '../models/ActivityLog.ts';
-import { sendLeaveStatusEmail } from '../services/emailService.ts';
-import { authenticate, authorize, AuthRequest } from '../middleware/auth.ts';
+import { authenticate, authorize, AuthRequest } from '../middleware/auth';
+import ActivityLog from '../models/ActivityLog';
+import Leave from '../models/Leave';
+import { sendLeaveStatusEmail } from '../services/emailService';
 
 const router = express.Router();
 

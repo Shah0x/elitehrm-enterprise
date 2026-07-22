@@ -1,8 +1,8 @@
-import express from 'express';
 import { GoogleGenAI, Type } from '@google/genai';
-import Attendance from '../models/Attendance.ts';
-import Leave from '../models/Leave.ts';
-import { authenticate, authorize } from '../middleware/auth.ts';
+import express from 'express';
+import { authenticate, authorize } from '../middleware/auth';
+import Attendance from '../models/Attendance';
+import Leave from '../models/Leave';
 
 const router = express.Router();
 

@@ -45,7 +45,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // 3. Local Development runner (Ignored by Vercel)
-if (!process.env.VERCEL) {
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   const PORT = Number(process.env.PORT) || 3000;
 
   async function startLocal() {

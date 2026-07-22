@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.ts';
+import User from '../models/User';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'elite-hrm-secret-key-2024';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'elite-hrm-refresh-secret-key-2026';

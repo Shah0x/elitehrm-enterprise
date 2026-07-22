@@ -1,7 +1,7 @@
 import express from 'express';
-import Attendance from '../models/Attendance.ts';
-import ActivityLog from '../models/ActivityLog.ts';
-import { authenticate, authorize, AuthRequest } from '../middleware/auth.ts';
+import { authenticate, authorize, AuthRequest } from '../middleware/auth';
+import ActivityLog from '../models/ActivityLog';
+import Attendance from '../models/Attendance';
 
 const router = express.Router();
 

@@ -1,9 +1,8 @@
-import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.ts';
-import ActivityLog from '../models/ActivityLog.ts';
-import Org from '../models/Org.ts';
+import ActivityLog from '../models/ActivityLog';
+import User from '../models/User';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'elite-hrm-secret-key-2024';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'elite-hrm-refresh-secret-key-2026';

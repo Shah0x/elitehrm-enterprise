@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
-import User from './models/User.ts';
-import Attendance from './models/Attendance.ts';
-import Leave from './models/Leave.ts';
+import Attendance from './models/Attendance';
+import Leave from './models/Leave';
+import User from './models/User';
 
 export const seedDB = async () => {
   try {

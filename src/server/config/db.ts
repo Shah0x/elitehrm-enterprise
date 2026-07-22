@@ -1,50 +1,27 @@
-// import mongoose from 'mongoose';
-
-// const MONGODB_URI = process.env.MONGODB_URI;
-
-// export const connectDB = async () => {
-//   if (!MONGODB_URI) {
-//     console.warn('⚠️ MONGODB_URI not found. Server will run in mock mode for development.');
-//     return;
-//   }
-
-//   try {
-//     await mongoose.connect(MONGODB_URI);
-//     console.log('[SUCCESS] Connected to MongoDB Cluster (EliteHRM Database)');
-//   } catch (error) {
-//     console.error('[ERROR] MongoDB connection error:', error);
-//     process.exit(1);
-//   }
-// };
-
-
 import mongoose from 'mongoose';
 
-let cachedConnection: Promise<typeof mongoose> | null = null;
+let isConnected = false;
 
 export const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
-    return mongoose;
+  // Reuse existing connection if ready
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    return;
   }
 
-  if (!cachedConnection) {
-    const uri = process.env.MONGODB_URI;
-
-    if (!uri) {
-      console.error('❌ MONGODB_URI is not defined in environment variables!');
-      throw new Error('MONGODB_URI is missing');
-    }
-
-    cachedConnection = mongoose.connect(uri).then(() => mongoose);
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error('CRITICAL: MONGODB_URI environment variable is not defined.');
+    throw new Error('MONGODB_URI is missing');
   }
 
   try {
-    await cachedConnection;
-    console.log('[SUCCESS] Connected to MongoDB Cluster (EliteHRM Database)');
-    return mongoose;
+    const db = await mongoose.connect(uri, {
+      bufferCommands: false, // Prevents hanging requests on serverless cold starts
+    });
+    isConnected = !!db.connections[0].readyState;
+    console.log('[SUCCESS] Connected to MongoDB Cluster');
   } catch (error) {
-    console.error('[ERROR] MongoDB connection error:', error);
-    cachedConnection = null;
+    console.error('[ERROR] MongoDB connection failed:', error);
     throw error;
   }
 };

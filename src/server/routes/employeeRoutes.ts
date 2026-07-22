@@ -1,9 +1,9 @@
-import express from 'express';
 import bcrypt from 'bcryptjs';
-import User from '../models/User.ts';
-import ActivityLog from '../models/ActivityLog.ts';
-import { sendOnboardingEmail } from '../services/emailService.ts';
-import { authenticate, authorize } from '../middleware/auth.ts';
+import express from 'express';
+import { authenticate, authorize } from '../middleware/auth';
+import ActivityLog from '../models/ActivityLog';
+import User from '../models/User';
+import { sendOnboardingEmail } from '../services/emailService';
 
 const router = express.Router();
 
