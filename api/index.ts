@@ -1,6 +1,6 @@
-import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import express from 'express';
 import { connectDB } from '../src/server/config/db.js';
 import analyticsRoutes from '../src/server/routes/analyticsRoutes.js';
 import attendanceRoutes from '../src/server/routes/attendanceRoutes.js';
@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// Database connection per serverless invocation
+// Database connection middleware per request
 app.use(async (req, res, next) => {
   try {
     await connectDB();
