@@ -1,16 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Briefcase, User } from 'lucide-react';
+import React from 'react';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Sidebar from './components/layout/Sidebar.tsx';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import { ThemeProvider } from './context/ThemeContext.tsx';
-import Sidebar from './components/layout/Sidebar.tsx';
 import AdminDashboard from './pages/AdminDashboard.tsx';
-import EmployeeDirectory from './pages/EmployeeDirectory.tsx';
-import AttendanceTracker from './pages/AttendanceTracker.tsx';
-import LeaveManager from './pages/LeaveManager.tsx';
-import Departments from './pages/Departments.tsx';
-import JobOpenings from './pages/JobOpenings.tsx';
 import AdminSettings from './pages/AdminSettings.tsx';
+import AttendanceTracker from './pages/AttendanceTracker.tsx';
+import Departments from './pages/Departments.tsx';
+import EmployeeDirectory from './pages/EmployeeDirectory.tsx';
+import JobOpenings from './pages/JobOpenings.tsx';
+import LeaveManager from './pages/LeaveManager.tsx';
 
 // Simple placeholder pages
 const Placeholder = ({ title }: { title: string }) => (
@@ -33,23 +33,33 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-    
+
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password: pass })
       });
 
-      const data = await res.json();
-      
-      if (res.ok) {
-        setAuthUser(data.user);
+      let data: any = null;
+      const contentType = res.headers.get('content-type') || '';
+
+      if (contentType.includes('application/json')) {
+        data = await res.json();
       } else {
-        setError(data.message || 'Login failed');
+        const text = await res.text();
+        data = text ? { message: text } : null;
+      }
+
+      if (res.ok) {
+        setAuthUser(data?.user);
+      } else {
+        setError(data?.message || data?.error || 'Login failed');
       }
     } catch (err) {
-      setError('Connection refused. Is the server running?');
+      const message = err instanceof Error ? err.message : 'Unable to reach the authentication service.';
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }

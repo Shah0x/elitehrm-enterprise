@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// 1. Unconditional DB connection middleware for Vercel Serverless
+// 1. Connect to MongoDB once per process and reuse the active connection for serverless invocations.
 app.use(async (req, res, next) => {
   try {
     await connectDB();

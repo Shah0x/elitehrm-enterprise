@@ -20,27 +20,31 @@
 
 import mongoose from 'mongoose';
 
+let cachedConnection: Promise<typeof mongoose> | null = null;
+
 export const connectDB = async () => {
-  // 1. If already connected, reuse the active connection
   if (mongoose.connection.readyState >= 1) {
-    return;
+    return mongoose;
   }
 
-  // 2. Dynamically fetch the URI inside the function execution
-  const uri = process.env.MONGODB_URI;
+  if (!cachedConnection) {
+    const uri = process.env.MONGODB_URI;
 
-  if (!uri) {
-    console.error('❌ MONGODB_URI is not defined in environment variables!');
-    throw new Error('MONGODB_URI is missing');
+    if (!uri) {
+      console.error('❌ MONGODB_URI is not defined in environment variables!');
+      throw new Error('MONGODB_URI is missing');
+    }
+
+    cachedConnection = mongoose.connect(uri).then(() => mongoose);
   }
 
   try {
-    // 3. Connect to MongoDB Atlas
-    await mongoose.connect(uri);
+    await cachedConnection;
     console.log('[SUCCESS] Connected to MongoDB Cluster (EliteHRM Database)');
+    return mongoose;
   } catch (error) {
     console.error('[ERROR] MongoDB connection error:', error);
-    // 4. Do NOT call process.exit(1) in serverless!
+    cachedConnection = null;
     throw error;
   }
 };
