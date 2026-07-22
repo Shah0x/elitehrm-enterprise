@@ -1,8 +1,8 @@
 import express from 'express';
-import { authenticate, authorize, AuthRequest } from '../middleware/auth';
-import ActivityLog from '../models/ActivityLog';
-import Leave from '../models/Leave';
-import { sendLeaveStatusEmail } from '../services/emailService';
+import { authenticate, authorize, AuthRequest } from '../middleware/auth.js';
+import ActivityLog from '../models/ActivityLog.js';
+import Leave from '../models/Leave.js';
+import { sendLeaveStatusEmail } from '../services/emailService.js';
 
 const router = express.Router();
 

@@ -1,8 +1,8 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import express from 'express';
-import { authenticate, authorize } from '../middleware/auth';
-import Attendance from '../models/Attendance';
-import Leave from '../models/Leave';
+import { authenticate, authorize } from '../middleware/auth.js';
+import Attendance from '../models/Attendance.js';
+import Leave from '../models/Leave.js';
 
 const router = express.Router();
 

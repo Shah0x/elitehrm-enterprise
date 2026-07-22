@@ -1,12 +1,12 @@
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import express from 'express';
-import { connectDB } from '../src/server/config/db';
-import analyticsRoutes from '../src/server/routes/analyticsRoutes';
-import attendanceRoutes from '../src/server/routes/attendanceRoutes';
-import authRoutes from '../src/server/routes/authRoutes';
-import employeeRoutes from '../src/server/routes/employeeRoutes';
-import leaveRoutes from '../src/server/routes/leaveRoutes';
+import { connectDB } from '../src/server/config/db.js';
+import analyticsRoutes from '../src/server/routes/analyticsRoutes.js';
+import attendanceRoutes from '../src/server/routes/attendanceRoutes.js';
+import authRoutes from '../src/server/routes/authRoutes.js';
+import employeeRoutes from '../src/server/routes/employeeRoutes.js';
+import leaveRoutes from '../src/server/routes/leaveRoutes.js';
 
 dotenv.config();
 

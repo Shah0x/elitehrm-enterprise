@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import express from 'express';
-import { authenticate, authorize } from '../middleware/auth';
-import ActivityLog from '../models/ActivityLog';
-import User from '../models/User';
-import { sendOnboardingEmail } from '../services/emailService';
+import { authenticate, authorize } from '../middleware/auth.js';
+import ActivityLog from '../models/ActivityLog.js';
+import User from '../models/User.js';
+import { sendOnboardingEmail } from '../services/emailService.js';
 
 const router = express.Router();
 
