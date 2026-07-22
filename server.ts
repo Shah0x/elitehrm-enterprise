@@ -10,7 +10,6 @@ import attendanceRoutes from './src/server/routes/attendanceRoutes';
 import authRoutes from './src/server/routes/authRoutes';
 import employeeRoutes from './src/server/routes/employeeRoutes';
 import leaveRoutes from './src/server/routes/leaveRoutes';
-import { seedDB } from './src/server/seed';
 
 dotenv.config();
 
@@ -19,7 +18,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// 1. Connect to MongoDB once per process and reuse the active connection for serverless invocations.
+// Parse body & cookies before route handling
+app.use(express.json());
+app.use(cookieParser());
+
+// 1. Database Connection Middleware (Per-request execution with connection reuse)
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -29,9 +32,6 @@ app.use(async (req, res, next) => {
     return res.status(500).json({ error: 'Database connection failed' });
   }
 });
-
-app.use(express.json());
-app.use(cookieParser());
 
 // 2. API Routes
 app.use('/api/auth', authRoutes);
@@ -44,16 +44,27 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'EliteHRM Server is running' });
 });
 
-// 3. Local Development runner (Ignored by Vercel)
+// Global Error Handling Middleware (Returns JSON instead of crashing Vercel function)
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Unhandled API Error:', err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message || 'An unexpected error occurred.',
+  });
+});
+
+// 3. Local Development runner (Guarded & ignored by Vercel)
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   const PORT = Number(process.env.PORT) || 3000;
 
   async function startLocal() {
     await connectDB();
+
+    // Dynamically import seedDB so seeding code is never bundled on Vercel
+    const { seedDB } = await import('./src/server/seed');
     await seedDB();
 
     if (process.env.NODE_ENV !== 'production') {
-      // Dynamic import prevents Vite from being bundled into Vercel serverless function
       const { createServer: createViteServer } = await import('vite');
       const vite = await createViteServer({
         server: { middlewareMode: true },
